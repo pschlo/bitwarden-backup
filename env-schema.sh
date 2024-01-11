@@ -8,6 +8,7 @@ EMAIL=
 MFA_METHOD=
 
 #Set locations to save export files
+# MUST end in a forward slash (/)
 EXPORT_PATH=
 
 #Set Organization ID (if applicable)
