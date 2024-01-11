@@ -7,7 +7,7 @@ export_attachments() {
 
         bash <(bw list items | jq -r '.[] 
         | select(.attachments != null) 
-        | "bw get attachment \"\(.attachments[].fileName)\" --itemid \(.id) --output \"'$save_folder_attachments'\(.name)/\""' )
+        | "bw get attachment \"\(.attachments[].fileName)\" --itemid \(.id) --output \"'$EXPORT_PATH'\(.name)/\""' )
     else
         echo
         echo "No attachments exist, so nothing to export."

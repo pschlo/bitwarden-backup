@@ -28,7 +28,7 @@ get_password() {
 
 login() {
     get_password
-    export BW_SESSION="$(bw login "$user_email" "$bw_password" --method "$two_factor_method" --raw)"
+    export BW_SESSION="$(bw login "$EMAIL" "$bw_password" --method "$MFA_METHOD" --raw)"
 }
 
 unlock() {

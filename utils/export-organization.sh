@@ -1,15 +1,15 @@
 #!/bin/bash
 
 export_organization() {
-    if [[ $org_id ]]; then 
+    if [[ $ORG_ID ]]; then 
         if [[ ! $password1 ]]; then
             echo
             echo "Exporting organization vault to an unencrypted file..."
-            bw export --organizationid "$org_id" --format json --output "$save_folder"
+            bw export --organizationid "$ORG_ID" --format json --output "$EXPORT_PATH"
         else
             echo 
             echo "Exporting organization vault to a password-encrypted file..."
-            bw export --organizationid "$org_id" --format encrypted_json --password "$password1" --output "$save_folder"
+            bw export --organizationid "$ORG_ID" --format encrypted_json --password "$password1" --output "$EXPORT_PATH"
         fi
     else
         echo
