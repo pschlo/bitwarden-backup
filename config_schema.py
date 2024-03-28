@@ -1,5 +1,5 @@
 from pathlib import Path
 
 
-EMAIL = ''
-OUT_DIR = Path()
+OUT_DIR: Path     = Path('/my/out/dir')
+EMAIL: str|None   = 'foo@example.com'
