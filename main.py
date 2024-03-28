@@ -1,10 +1,6 @@
-from exporter import Exporter
+from export import create_export
 import config
 
 
-def main():
-  Exporter(config.OUT_DIR, config.EMAIL).run()
-
-
 if __name__ == "__main__":
-  main()
+  create_export(config.OUT_DIR, config.EMAIL)
