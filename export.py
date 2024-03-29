@@ -1,6 +1,6 @@
 from __future__ import annotations
 from pathlib import Path
-from pywarden import BitwardenControl, CliConfig, ApiConfig, Item, Attachment, UnlockedControl
+from pywarden import BaseBwControl, UnlockedBwControl, Item, Attachment
 import shutil
 
 
@@ -10,8 +10,7 @@ def create_export(out_dir: Path, email: str|None = None):
   out_dir.mkdir()
 
   try:
-    base_ctl = BitwardenControl(CliConfig(), ApiConfig())
-    with base_ctl.login_unlock_interactive(email) as ctl:
+    with BaseBwControl().login_unlock_interactive(email) as ctl:
       _export(ctl, out_dir)
   except:
     print("Export failed, deleting output")
@@ -19,7 +18,7 @@ def create_export(out_dir: Path, email: str|None = None):
     raise
 
 
-def _export(ctl: UnlockedControl, out_dir: Path) -> None:
+def _export(ctl: UnlockedBwControl, out_dir: Path) -> None:
   def main() -> None:
     save_json()
     items = get_items_with_attach()
