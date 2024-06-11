@@ -10,13 +10,28 @@ log = logging.getLogger(__name__)
 INDENT = 2
 
 
+def guess_clipath() -> Path:
+  # try finding in path
+  r = shutil.which('bw')
+  if r is not None:
+    return Path(r)
+  
+  # try finding in current dir
+  r = Path('bw').resolve()
+  if r.exists():
+    return r
+  
+  raise ValueError(f"Could not determine Bitwarden CLI path. Please provide it with '--clipath'.")
+
+
 def create_export(out_dir: Path, email: str|None = None, clipath: Path|None = None):
   if out_dir.exists():
     raise RuntimeError(f"Output folder already exists")
   out_dir.mkdir()
 
-  cli_conf = CliConfig(clipath or Path('bw'))
   try:
+    clipath = clipath.resolve() if clipath is not None else guess_clipath()
+    cli_conf = CliConfig(clipath)
     with BaseBwControl(cli_conf).login_unlock_interactive(email) as ctl:
       _export(ctl, out_dir)
   except:
