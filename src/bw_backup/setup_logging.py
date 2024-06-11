@@ -2,19 +2,22 @@ import logging
 import sys
 
 
-def setup_logging(root_loglevel: int = logging.INFO, others_loglevel: int = logging.WARNING):
+def setup_logging(root_loglevel: int = logging.INFO, include_packages: set[str]|None = None, others_loglevel: int = logging.WARNING):
     """
     - sets log level of the root logger
-    - sets log level for logger of other packages
+    - sets log level for logger of other (i.e. not included) packages
     - configures the root logger
     """
-    # set log level for loggers of other packages
+    if include_packages is None:
+        include_packages = set()
+    include_packages |= {'__main__', __name__.split('.')[0]}  # executed script and current package are always included
+
     loggers = {logging.getLogger(name) for name in logging.root.manager.loggerDict}
-    package = __name__.split('.')[0]
+
     for logger in loggers:
-        if logger.name.startswith(package) or logger.name == '__main__':
-            continue
-        logger.setLevel(others_loglevel)
+        if logger.name.split('.')[0] not in include_packages:
+            logger.setLevel(others_loglevel)
+    
     _setup_root_logger(root_loglevel)
 
 
