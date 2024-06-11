@@ -7,6 +7,8 @@ import logging
 
 log = logging.getLogger(__name__)
 
+INDENT = 2
+
 
 def create_export(out_dir: Path, email: str|None = None):
   if out_dir.exists():
@@ -47,7 +49,7 @@ def _export(ctl: UnlockedBwControl, out_dir: Path) -> None:
     name = item['name']
     short_id = item['id'].split('-')[0]
     folder = out_dir / f"{name} ({short_id})"
-    log.info(f"  Getting attachments of item '{name} ({short_id})'")
+    log.info(1*INDENT*" " + f"Getting attachments of item '{name} ({short_id})'")
     folder.mkdir()
 
     for attach in item['attachments']:
@@ -61,7 +63,7 @@ def _export(ctl: UnlockedBwControl, out_dir: Path) -> None:
       i += 1
       name = f"{base_name.stem} ({i}){base_name.suffix}"
 
-    log.info(f"    Fetching attachment '{name}'")
+    log.info(2*INDENT*" " + f"Fetching attachment '{name}'")
     content = ctl.get_attachment(item['id'], attach['id'])
     with (folder / name).open('wb') as f:
       f.write(content)
