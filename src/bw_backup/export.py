@@ -5,7 +5,7 @@ import shutil
 import logging
 
 
-log = logging.getLogger()
+log = logging.getLogger(__name__)
 
 
 def create_export(out_dir: Path, email: str|None = None):

@@ -3,16 +3,27 @@ import sys
 
 
 def setup(root_loglevel: int = logging.INFO, others_loglevel: int = logging.WARNING):
+    """
+    - sets log level of the root logger
+    - sets log level for logger of other packages
+    - configures the root logger
+    """
     # set log level for loggers of other packages
     loggers = {logging.getLogger(name) for name in logging.root.manager.loggerDict}
+    package = __name__.split('.')[0]
     for logger in loggers:
+        if logger.name.startswith(package) or logger.name == '__main__':
+            continue
         logger.setLevel(others_loglevel)
     _setup_root_logger(root_loglevel)
 
 
 def _setup_root_logger(loglevel: int):
+    """Configures the root logger with formatter, handlers, and exception handling."""
     logger = logging.getLogger()
     logger.setLevel(loglevel)
+
+    # configure formatter
     formatter = logging.Formatter('[%(asctime)s %(levelname)s]: %(message)s', '%H:%M:%S')
 
     # configure stream handler
@@ -20,6 +31,7 @@ def _setup_root_logger(loglevel: int):
     stream_handler.setFormatter(formatter)
     logger.addHandler(stream_handler)
 
+    # configure level names
     logging.addLevelName(logging.DEBUG, 'DBUG')
     logging.addLevelName(logging.INFO, 'INFO')
     logging.addLevelName(logging.WARNING, 'WARN')

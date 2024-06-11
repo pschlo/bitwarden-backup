@@ -8,7 +8,7 @@ from .export import create_export
 
 
 setup_logging()
-log = logging.getLogger()
+log = logging.getLogger(__name__)
 
 
 class Args(Protocol):
