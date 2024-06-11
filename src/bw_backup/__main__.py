@@ -7,7 +7,7 @@ from .setup_logging import setup_logging
 from .export import create_export
 
 
-setup_logging()
+setup_logging(include_packages={'pywarden'})
 log = logging.getLogger(__name__)
 
 
