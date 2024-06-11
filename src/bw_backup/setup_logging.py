@@ -2,7 +2,7 @@ import logging
 import sys
 
 
-def setup(root_loglevel: int = logging.INFO, others_loglevel: int = logging.WARNING):
+def setup_logging(root_loglevel: int = logging.INFO, others_loglevel: int = logging.WARNING):
     """
     - sets log level of the root logger
     - sets log level for logger of other packages

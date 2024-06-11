@@ -3,7 +3,7 @@ from typing import Protocol, cast
 import argparse
 import logging
 
-from .logging import setup as setup_logging
+from .setup_logging import setup_logging
 from .export import create_export
 
 
