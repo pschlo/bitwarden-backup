@@ -1,6 +1,6 @@
 from __future__ import annotations
 from pathlib import Path
-from pywarden import BaseBwControl, UnlockedBwControl, Item, Attachment
+from pywarden import BaseBwControl, UnlockedBwControl, Item, Attachment, CliConfig
 import shutil
 import logging
 
@@ -10,13 +10,14 @@ log = logging.getLogger(__name__)
 INDENT = 2
 
 
-def create_export(out_dir: Path, email: str|None = None):
+def create_export(out_dir: Path, email: str|None = None, clipath: Path|None = None):
   if out_dir.exists():
     raise RuntimeError(f"Output folder already exists")
   out_dir.mkdir()
 
+  cli_conf = CliConfig(clipath or Path('bw'))
   try:
-    with BaseBwControl().login_unlock_interactive(email) as ctl:
+    with BaseBwControl(cli_conf).login_unlock_interactive(email) as ctl:
       _export(ctl, out_dir)
   except:
     log.error("Export failed, deleting output")

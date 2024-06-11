@@ -14,13 +14,15 @@ log = logging.getLogger(__name__)
 class Args(Protocol):
     output_dir: Path
     email: str | None
+    clipath: Path | None
 
 
 def get_args() -> Args:
     parser = argparse.ArgumentParser('bw-backup')
     parser.add_argument('output_dir', type=Path)
     parser.add_argument('--email', type=str)
+    parser.add_argument('--clipath', type=Path)
     return cast(Args, parser.parse_args())
 
 args = get_args()
-create_export(args.output_dir, args.email)
+create_export(args.output_dir, email=args.email, clipath=args.clipath)
