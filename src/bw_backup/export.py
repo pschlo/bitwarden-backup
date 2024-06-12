@@ -3,6 +3,7 @@ from pathlib import Path
 from pywarden import BaseBwControl, UnlockedBwControl, Item, Attachment, CliConfig
 import shutil
 import logging
+from datetime import datetime
 
 
 log = logging.getLogger(__name__)
@@ -24,7 +25,9 @@ def guess_clipath() -> Path:
   raise ValueError(f"Could not determine Bitwarden CLI path. Please provide it with '--clipath'.")
 
 
-def create_export(out_dir: Path, email: str|None = None, clipath: Path|None = None):
+def create_export(out_dir: Path|None = None, email: str|None = None, clipath: Path|None = None):
+  if out_dir is None:
+    out_dir = Path('bw-backup_' + datetime.now().strftime("%Y-%m-%d_%H-%M"))
   if out_dir.exists():
     raise RuntimeError(f"Output folder already exists")
   out_dir.mkdir()
