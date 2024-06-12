@@ -11,7 +11,7 @@ INDENT = 2
 
 
 def guess_clipath() -> Path:
-  # try finding in path
+  # try finding in PATH
   r = shutil.which('bw')
   if r is not None:
     return Path(r)
