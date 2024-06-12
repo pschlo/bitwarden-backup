@@ -2,7 +2,7 @@
 set -e
 
 BW_CLI=2024.4.1
-BW_BACKUP=1.0.4
+BW_BACKUP=1.0.5
 PYWARDEN=1.1.4
 
 BW_DATA_DIR=bw_backup_data
