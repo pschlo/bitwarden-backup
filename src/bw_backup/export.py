@@ -25,20 +25,22 @@ def guess_clipath() -> Path:
   raise ValueError(f"Could not determine Bitwarden CLI path. Please provide it with '--clipath'.")
 
 
-def create_export(out_dir_parent: Path|None = None, email: str|None = None, clipath: Path|None = None):
+def create_export(outdir_parent: Path|None = None, email: str|None = None, clipath: Path|None = None):
   clipath = clipath.resolve() if clipath is not None else guess_clipath()
   cli_conf = CliConfig(clipath)
   
   with BaseBwControl(cli_conf).login_unlock_interactive(email) as ctl:
     email = ctl.status()['userEmail']
     time = datetime.now().strftime("%Y-%m-%d_%H-%M")
-    out_dir = (out_dir_parent or Path()) / f'bw-backup_{email}_{time}'
-    out_dir.mkdir()
+    outdir = (outdir_parent or Path()) / f'bw-backup_{email}_{time}'
+    outdir = outdir.resolve()
+    outdir.mkdir()
     try:
-      _export(ctl, out_dir)
+      log.info(f'Starting export to "{outdir}"')
+      _export(ctl, outdir)
     except:
       log.error("Export failed, deleting output")
-      shutil.rmtree(out_dir)
+      shutil.rmtree(outdir)
       raise
 
 

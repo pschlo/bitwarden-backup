@@ -10,7 +10,7 @@ import sys
 
 
 BW_CLI_VERSION = "2024.4.1"
-BW_BACKUP_VERSION = "1.0.8"
+BW_BACKUP_VERSION = "1.0.9"
 
 
 def main():
@@ -20,7 +20,7 @@ def main():
         print(f'Setting up bundle in {tmpdir}')
         setup_bundle(tmpdir)
 
-        packfile = Path(f'bw_backup-{BW_BACKUP_VERSION}-bundle.tar.gz').resolve()
+        packfile = Path(f'bw-backup_{BW_BACKUP_VERSION}_bundle.tar.gz').resolve()
         print(f'Packing bundle to {packfile}')
         pack_bundle(tmpdir, packfile)
 
@@ -57,7 +57,7 @@ def setup_bundle(out_dir: Path) -> None:
 
 def pack_bundle(in_dir: Path, out_file: Path) -> None:
     with tarfile.open(out_file, "w:gz") as tar:
-        tar.add(in_dir, arcname='bw-backup')
+        tar.add(in_dir, arcname=f'bw-backup_{BW_BACKUP_VERSION}')
 
 
 if __name__ == '__main__':
