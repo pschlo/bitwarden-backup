@@ -47,7 +47,7 @@ def setup_bundle(out_dir: Path) -> None:
     lines = [
         rf'#!/usr/bin/env python3',
         rf'import os; import sys; import subprocess; from pathlib import Path',
-        rf'orig_path = Path.cwd()'
+        rf'orig_path = Path.cwd()',
         rf'os.chdir(Path(__file__).parent.resolve())',
         rf'subprocess.run([sys.executable, "-m", "bw_backup", orig_path])',
     ]
