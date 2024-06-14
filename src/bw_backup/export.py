@@ -25,24 +25,21 @@ def guess_clipath() -> Path:
   raise ValueError(f"Could not determine Bitwarden CLI path. Please provide it with '--clipath'.")
 
 
-def create_export(out_dir: Path|None = None, email: str|None = None, clipath: Path|None = None):
-  if out_dir is None:
-    out_dir = Path()
-  time = datetime.now().strftime("%Y-%m-%d_%H-%M")
-  out_dir = out_dir / Path(f'bw-backup_{email}_{time}')
-  if out_dir.exists():
-    raise RuntimeError(f"Output folder already exists")
-  out_dir.mkdir()
-
-  try:
-    clipath = clipath.resolve() if clipath is not None else guess_clipath()
-    cli_conf = CliConfig(clipath)
-    with BaseBwControl(cli_conf).login_unlock_interactive(email) as ctl:
+def create_export(out_dir_parent: Path|None = None, email: str|None = None, clipath: Path|None = None):
+  clipath = clipath.resolve() if clipath is not None else guess_clipath()
+  cli_conf = CliConfig(clipath)
+  
+  with BaseBwControl(cli_conf).login_unlock_interactive(email) as ctl:
+    email = ctl.status()['userEmail']
+    time = datetime.now().strftime("%Y-%m-%d_%H-%M")
+    out_dir = (out_dir_parent or Path()) / f'bw-backup_{email}_{time}'
+    out_dir.mkdir()
+    try:
       _export(ctl, out_dir)
-  except:
-    log.error("Export failed, deleting output")
-    shutil.rmtree(out_dir)
-    raise
+    except:
+      log.error("Export failed, deleting output")
+      shutil.rmtree(out_dir)
+      raise
 
 
 def _export(ctl: UnlockedBwControl, out_dir: Path) -> None:
