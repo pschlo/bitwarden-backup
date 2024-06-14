@@ -7,11 +7,10 @@ import stat
 import tempfile
 import tarfile
 import sys
-import os
 
 
 BW_CLI_VERSION = "2024.4.1"
-BW_BACKUP_VERSION = "1.0.7"
+BW_BACKUP_VERSION = "1.0.8"
 
 
 def main():
