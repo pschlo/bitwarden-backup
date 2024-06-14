@@ -18,22 +18,6 @@ OUT_DIR = Path("bundle")
 SCRIPT = "run.py"
 
 
-def download_github(project: str, release: str, asset: str) -> bytes:
-    r = requests.get(rf'https://github.com/{project}/releases/download/{release}/{asset}')
-    r.raise_for_status()
-    return r.content
-
-def unzip(content: bytes, dest: Path) -> None:
-    f = ZipFile(BytesIO(content))
-    f.extractall(dest)
-
-def untar(content: bytes, dest: Path, *, path: Path = Path()) -> None:
-    f = TarFile(fileobj=GzipFile(fileobj=BytesIO(content)))
-    members = [m for m in f.getmembers() if Path(m.name).is_relative_to(path)]
-    for m in members:
-        m.name = str(Path(m.name).relative_to(path.parent))
-    f.extractall(dest, members=members)
-
 def make_executable(path: Path) -> None:
     st = os.stat(path)
     os.chmod(path, st.st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
@@ -43,19 +27,14 @@ OUT_DIR.mkdir()
 
 
 print(f"Downloading Bitwarden CLI")
-cli_asset = download_github('bitwarden/clients', f'cli-v{BW_CLI}', f'bw-linux-{BW_CLI}.zip')
-unzip(cli_asset, OUT_DIR)
+r = requests.get(f'https://github.com/bitwarden/clients/releases/download/cli-v{BW_CLI}/bw-linux-{BW_CLI}.zip')
+r.raise_for_status()
+ZipFile(BytesIO(r.content)).extractall(OUT_DIR)
 make_executable(OUT_DIR / 'bw')
 
 
-print(f"Downloading pywarden")
-pywarden_asset = download_github('pschlo/pywarden', f'v{PYWARDEN}', f'pywarden-{PYWARDEN}.tar.gz')
-untar(pywarden_asset, OUT_DIR, path=Path(f'pywarden-{PYWARDEN}', 'src', 'pywarden'))
-
-
 print(f"Downloading bw-backup")
-bw_backup_asset = download_github('pschlo/bw-backup', f'v{BW_BACKUP}', f'bw_backup-{BW_BACKUP}.tar.gz')
-untar(bw_backup_asset, OUT_DIR, path=Path(f'bw_backup-{BW_BACKUP}', 'src', 'bw_backup'))
+subprocess.run([sys.executable, '-m', 'pip', 'install', '--target', str(OUT_DIR), 'http://path/to/bw-backup'])
 
 
 lines = [

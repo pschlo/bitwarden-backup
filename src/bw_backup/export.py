@@ -17,7 +17,7 @@ def guess_clipath() -> Path:
   if r is not None:
     return Path(r)
   
-  # try finding in current dir
+  # try finding in current working dir
   r = Path('bw').resolve()
   if r.exists():
     return r
