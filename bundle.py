@@ -10,7 +10,7 @@ import sys
 
 
 BW_CLI_VERSION = "2024.4.1"
-BW_BACKUP_VERSION = "1.0.8"
+BW_BACKUP_VERSION = "1.0.9"
 
 
 def main():
