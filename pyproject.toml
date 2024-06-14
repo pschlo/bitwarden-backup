@@ -11,6 +11,9 @@ authors = [
 description = "Bitwarden Backup CLI"
 readme = "README.md"
 requires-python = ">=3.10"
+dependencies = [
+  "pywarden @ https://github.com/pschlo/pywarden/releases/download/v1.1.4/pywarden-1.1.4.tar.gz"
+]
 
 
 [tool.hatch.build.targets.sdist]
