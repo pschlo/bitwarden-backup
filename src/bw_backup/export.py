@@ -27,7 +27,9 @@ def guess_clipath() -> Path:
 
 def create_export(out_dir: Path|None = None, email: str|None = None, clipath: Path|None = None):
   if out_dir is None:
-    out_dir = Path('bw-backup_' + datetime.now().strftime("%Y-%m-%d_%H-%M"))
+    out_dir = Path()
+  time = datetime.now().strftime("%Y-%m-%d_%H-%M")
+  out_dir = out_dir / Path(f'bw-backup_{email}_{time}')
   if out_dir.exists():
     raise RuntimeError(f"Output folder already exists")
   out_dir.mkdir()
