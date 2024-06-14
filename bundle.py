@@ -10,7 +10,7 @@ import sys
 
 
 BW_CLI_VERSION = "2024.4.1"
-BW_BACKUP_VERSION = "1.0.9"
+BW_BACKUP_VERSION = "1.0.8"
 
 
 def main():
@@ -45,10 +45,7 @@ def setup_bundle(out_dir: Path) -> None:
     runfile = out_dir / "run.py"
     lines = [
         rf'#!/usr/bin/env python3',
-        rf'import os; import sys; import subprocess; from pathlib import Path',
-        rf'orig_path = Path.cwd()',
-        rf'os.chdir(Path(__file__).parent.resolve())',
-        rf'subprocess.run([sys.executable, "-m", "bw_backup", orig_path])',
+        rf'import bw_backup.__main__'
     ]
     with open(runfile, 'w') as f:
         f.write("\n".join(lines))
