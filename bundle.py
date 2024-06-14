@@ -20,7 +20,7 @@ def main():
         print(f'Setting up bundle in {tmpdir}')
         setup_bundle(tmpdir)
 
-        packfile = Path('bundle.tar.gz').resolve()
+        packfile = Path(f'bw_backup-{BW_BACKUP_VERSION}-bundle.tar.gz').resolve()
         print(f'Packing bundle to {packfile}')
         pack_bundle(tmpdir, packfile)
 
