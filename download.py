@@ -12,8 +12,6 @@ import os
 
 BW_CLI = "2024.4.1"
 BW_BACKUP = "1.0.5"
-PYWARDEN = "1.1.4"
-
 OUT_DIR = Path("bundle")
 SCRIPT = "run.py"
 
@@ -34,7 +32,8 @@ make_executable(OUT_DIR / 'bw')
 
 
 print(f"Downloading bw-backup")
-subprocess.run([sys.executable, '-m', 'pip', 'install', '--target', str(OUT_DIR), 'http://path/to/bw-backup'])
+subprocess.run([sys.executable, '-m', 'pip', 'install', '--target', str(OUT_DIR), \
+    f'https://github.com/pschlo/bw-backup/releases/download/v{BW_BACKUP}/bw_backup-{BW_BACKUP}.tar.gz'])
 
 
 lines = [
