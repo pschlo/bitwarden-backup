@@ -21,11 +21,6 @@ def guess_clipath() -> Path:
   r = Path.cwd() / 'bw'
   if r.exists():
     return r
-  
-  # try finding next to this package
-  r = Path(__file__).parent.parent.resolve() / 'bw'
-  if r.exists():
-    return r
 
   raise ValueError(f"Could not determine Bitwarden CLI path. Please provide it with '--clipath'.")
 

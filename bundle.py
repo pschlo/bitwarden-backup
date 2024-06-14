@@ -44,6 +44,9 @@ def setup_bundle(out_dir: Path) -> None:
     runfile = out_dir / "run.py"
     lines = [
         rf'#!/usr/bin/env python3',
+        rf'import sys; from pathlib import Path',
+        rf'p = Path(__file__).parent.resolve()',
+        rf'sys.argv += ["--clipath", str(p / "bw")]',
         rf'import bw_backup.__main__'
     ]
     with open(runfile, 'w') as f:
