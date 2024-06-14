@@ -37,9 +37,8 @@ def setup_bundle(out_dir: Path) -> None:
     ZipFile(BytesIO(r.content)).extractall(out_dir)
     make_executable(out_dir / 'bw')
 
-    print(f"Downloading bw-backup")
-    subprocess.run([sys.executable, '-m', 'pip', 'install', '--target', str(out_dir), \
-        f'https://github.com/pschlo/bw-backup/releases/download/v{BW_BACKUP_VERSION}/bw_backup-{BW_BACKUP_VERSION}.tar.gz'])
+    print(f"Preparing bw-backup")
+    subprocess.run([sys.executable, '-m', 'pip', 'install', '--target', str(out_dir), str(Path(__file__).parent.resolve())])
 
     print(f"Generating run.py")
     runfile = out_dir / "run.py"

@@ -16,14 +16,14 @@ def guess_clipath() -> Path:
   r = shutil.which('bw')
   if r is not None:
     return Path(r)
-  
+
   # try finding in current working dir
   r = Path.cwd() / 'bw'
   if r.exists():
     return r
   
   # try finding next to this package
-  r = Path(__file__).parent.resolve() / 'bw'
+  r = Path(__file__).parent.parent.resolve() / 'bw'
   if r.exists():
     return r
 
