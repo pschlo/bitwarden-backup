@@ -10,3 +10,10 @@ Small script to back up Bitwarden vault, including attachments
 3. Go to https://github.com/pschlo/bw-backup/releases and choose a release. Under the chosen release, look for an asset `bw_backup-x.x.x.tar.gz`. Copy the link to the asset.
 4. Install bw-backup with `pip install [link to asset]`
 5. Run the backup script with `python -m bw_backup`
+
+
+
+### Optional: Encrypting the Backup
+
+* encrypt with `gpgtar -co [backup-name].tar.gpg [backup-name]`
+* decrypt with `gpgtar -dC . [backup-name].tar.gpg ` 
