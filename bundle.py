@@ -57,8 +57,7 @@ def setup_bundle(out_dir: Path) -> None:
 
 def pack_bundle(in_dir: Path, out_file: Path) -> None:
     with tarfile.open(out_file, "w:gz") as tar:
-        outfile_stem = str(out_file.name).removesuffix(''.join(out_file.suffixes))
-        tar.add(in_dir, arcname=outfile_stem)
+        tar.add(in_dir, arcname='bw-backup')
 
 
 if __name__ == '__main__':
