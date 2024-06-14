@@ -27,8 +27,8 @@ def main():
 
 
 def make_executable(path: Path) -> None:
-    st = os.stat(path)
-    os.chmod(path, st.st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+    new_mode = path.stat().st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH
+    path.chmod(new_mode)
 
 
 def setup_bundle(out_dir: Path) -> None:
@@ -47,9 +47,9 @@ def setup_bundle(out_dir: Path) -> None:
     lines = [
         rf'#!/usr/bin/env python3',
         rf'import os; import sys; import subprocess; from pathlib import Path',
-        rf'path = Path(__file__).parent.resolve()',
-        rf'os.chdir(path)',
-        rf'subprocess.run([sys.executable, "-m", "bw_backup"])',
+        rf'orig_path = Path.cwd()'
+        rf'os.chdir(Path(__file__).parent.resolve())',
+        rf'subprocess.run([sys.executable, "-m", "bw_backup", orig_path])',
     ]
     with open(runfile, 'w') as f:
         f.write("\n".join(lines))
