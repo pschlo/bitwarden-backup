@@ -7,39 +7,64 @@ import stat
 from tarfile import TarFile
 from gzip import GzipFile
 import sys
+import os
 
 
 BW_CLI = "2024.4.1"
 BW_BACKUP = "1.0.5"
 PYWARDEN = "1.1.4"
 
-BW_DATA_DIR = Path("bw_backup_data")
-SCRIPT = "run-bw-backup"
+OUT_DIR = Path("bundle")
+SCRIPT = "run.py"
 
 
-BW_DATA_DIR.mkdir()
+def download_github(project: str, release: str, asset: str) -> bytes:
+    r = requests.get(rf'https://github.com/{project}/releases/download/{release}/{asset}')
+    r.raise_for_status()
+    return r.content
 
-# print(f"Downloading Bitwarden CLI")
-# r = requests.get(rf'https://github.com/bitwarden/clients/releases/download/cli-v{BW_CLI}/bw-linux-{BW_CLI}.zip')
-# r.raise_for_status()
-# ZipFile(BytesIO(r.content)).extractall(BW_DATA_DIR)
+def unzip(content: bytes, dest: Path) -> None:
+    f = ZipFile(BytesIO(content))
+    f.extractall(dest)
+
+def untar(content: bytes, dest: Path, *, path: Path = Path()) -> None:
+    f = TarFile(fileobj=GzipFile(fileobj=BytesIO(content)))
+    members = [m for m in f.getmembers() if Path(m.name).is_relative_to(path)]
+    for m in members:
+        m.name = str(Path(m.name).relative_to(path.parent))
+    f.extractall(dest, members=members)
+
+def make_executable(path: Path) -> None:
+    st = os.stat(path)
+    os.chmod(path, st.st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+
+
+OUT_DIR.mkdir()
+
+
+print(f"Downloading Bitwarden CLI")
+cli_asset = download_github('bitwarden/clients', f'cli-v{BW_CLI}', f'bw-linux-{BW_CLI}.zip')
+unzip(cli_asset, OUT_DIR)
+make_executable(OUT_DIR / 'bw')
+
 
 print(f"Downloading pywarden")
-r = requests.get(rf'https://github.com/pschlo/pywarden/releases/download/v{PYWARDEN}/pywarden-{PYWARDEN}.tar.gz')
-r.raise_for_status()
-f = TarFile(fileobj=GzipFile(fileobj=BytesIO(r.content)))
-
-prefix = f'pywarden-{PYWARDEN}/src/pywarden'
-members = [m for m in f.getmembers() if m.name.startswith(prefix)]
-for m in members:
-    m.name = m.name.removeprefix(prefix).removeprefix('/')
-f.extractall(BW_DATA_DIR / 'pywarden', members=members)
+pywarden_asset = download_github('pschlo/pywarden', f'v{PYWARDEN}', f'pywarden-{PYWARDEN}.tar.gz')
+untar(pywarden_asset, OUT_DIR, path=Path(f'pywarden-{PYWARDEN}', 'src', 'pywarden'))
 
 
-# print(f"Downloading bw-backup")
-# r = requests.get(rf'https://github.com/pschlo/bw-backup/releases/download/v{BW_BACKUP}/bw_backup-{BW_BACKUP}.tar.gz')
-# r.raise_for_status()
-# TarFile(fileobj=GzipFile(fileobj=BytesIO(r.content))).extractall(BW_DATA_DIR)
+print(f"Downloading bw-backup")
+bw_backup_asset = download_github('pschlo/bw-backup', f'v{BW_BACKUP}', f'bw_backup-{BW_BACKUP}.tar.gz')
+untar(bw_backup_asset, OUT_DIR, path=Path(f'bw_backup-{BW_BACKUP}', 'src', 'bw_backup'))
 
 
-sys.executable
+lines = [
+    rf'#!/usr/bin/env python3',
+    rf'import os; import sys; import subprocess; from pathlib import Path',
+    rf'path = Path(__file__).parent.resolve()',
+    rf'os.chdir(path)',
+    rf'subprocess.run([sys.executable, "-m", "bw_backup"])',
+]
+with open(Path(OUT_DIR / SCRIPT), 'w') as f:
+    f.write("\n".join(lines))
+make_executable(OUT_DIR / SCRIPT)
