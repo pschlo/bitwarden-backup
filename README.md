@@ -13,9 +13,16 @@ Small script to back up Bitwarden vault, including attachments
 
 ### Optional: Encrypting the Backup
 
-* encrypt with `gpgtar -co [backup-name].tar.gpg [backup-name]`
-* decrypt with `gpgtar -dC . [backup-name].tar.gpg `
+* encrypt:
+  * `tar -cf [backup-name].tar [backup-name]`
+  * `gpg --no-symkey-cache -co [backup-name].tar.gpg [backup-name].tar`
+* decrypt:
+  * `gpg --no-symkey-cache -do [backup-name].tar [backup-name].tar.gpg`
+  * `tar -xf [backup-name].tar`
+* clear GPG password cache: `gpg-connect-agent reloadagent /bye`
 
-### Hints for backups from a live OS
+### Hints for backups from Tails OS
 
-* for installing bw-backup, standalone pip might be the easiest option
+* Use standalone pip to avoid having to install it
+* use `7z x` to extract the Bitwarden CLI
+* Use `torify` to run both `pip install` and `python3 -m bw_backup`
