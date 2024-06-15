@@ -70,10 +70,10 @@ def _export(ctl: UnlockedBwControl, out_dir: Path) -> None:
 
     def save_attachments(dir: Path, item: Item):
         name = item['name']
-        short_id = item['id'].split('-')[0]
-        log.info(1*INDENT*" " + f"Getting attachments of item '{name} ({short_id})'")
+        id = item['id']
+        log.info(1*INDENT*" " + f"Getting attachments of item {id} ({name})'")
 
-        item_dir = dir / f"{name} ({short_id})"
+        item_dir = dir / f"{id}"
         item_dir.mkdir()
 
         for attach in item['attachments']:
