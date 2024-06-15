@@ -21,7 +21,7 @@ Small script to back up Bitwarden vault, including attachments
   * `tar -xf [backup-name].tar`
 * clear GPG password cache: `gpg-connect-agent reloadagent /bye`
 
-### Hints for backups from Tails OS
+### Hints for backups with Tails OS
 
 * Use standalone pip to avoid having to install it
 * use `7z x` to extract the Bitwarden CLI
