@@ -71,7 +71,7 @@ def _export(ctl: UnlockedBwControl, out_dir: Path) -> None:
     def save_attachments(dir: Path, item: Item):
         name = item['name']
         id = item['id']
-        log.info(1*INDENT*" " + f"Getting attachments of item {id} ({name})'")
+        log.info(1*INDENT*" " + f'Getting attachments of item {id} ("{name}")')
 
         item_dir = dir / f"{id}"
         item_dir.mkdir()
@@ -87,7 +87,7 @@ def _export(ctl: UnlockedBwControl, out_dir: Path) -> None:
             i += 1
             name = f"{base_name.stem} ({i}){base_name.suffix}"
 
-        log.info(2*INDENT*" " + f"Fetching attachment '{name}'")
+        log.info(2*INDENT*" " + f'Fetching attachment "{name}"')
         content = ctl.get_attachment(item['id'], attach['id'])
         with (dir / name).open('wb') as f:
             f.write(content)
