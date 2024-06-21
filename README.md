@@ -1,4 +1,4 @@
-# bitwarden-backup
+# bw-backup
 Small script to back up Bitwarden vault, including attachments
 
 
@@ -26,3 +26,10 @@ Small script to back up Bitwarden vault, including attachments
 * Use standalone pip to avoid having to install it
 * use `7z x` to extract the Bitwarden CLI
 * Use `torify` to run both `pip install` and `python3 -m bw_backup`
+
+
+
+## Motivation
+
+* Official Bitwarden backup guide: [here](https://bitwarden.com/resources/guide-how-to-create-and-store-a-backup-of-your-bitwarden-vault/)
+* Guide written by a Bitwarden user: [here](https://community.bitwarden.com/t/how-to-a-users-guide-to-backing-up-your-bitwarden-vault/44083)
